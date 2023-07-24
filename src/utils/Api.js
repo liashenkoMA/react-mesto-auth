@@ -145,6 +145,62 @@ class Api {
       return Promise.reject(`Ошибка: ${res.status}`);
     });
   };
+
+  register (email, password) {
+    return fetch('https://auth.nomoreparties.co/signup', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: `${password}`,
+        email: `${email}`,
+      })
+    })
+    .then((response) => {
+        if(response.ok) {
+          return response.json();
+        }
+        return Promise.reject(response);
+    })
+  }
+
+  auth(email, password) {
+    return fetch('https://auth.nomoreparties.co/signin', {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        password: `${password}`,
+        email: `${email}`,
+      })
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      localStorage.setItem('jwt', data.token)
+      return data;
+    })
+  };
+
+  tokenCheack(token) {
+    return fetch('https://auth.nomoreparties.co/users/me', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token}`,
+      }
+    })
+    .then((res) => {
+      return res.json();
+    })
+    .then((user) => {
+      return user.data;
+    })
+  };
 };
 
 export const api = new Api('cohort-68', 'f1605107-de74-4364-b9cb-272c1e5a2dd9');
