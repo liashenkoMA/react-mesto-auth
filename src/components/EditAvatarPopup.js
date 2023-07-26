@@ -5,16 +5,16 @@ export function EditAvatarPopup(props) {
 
   const avatarRef = React.useRef();
 
-  function handleSubmit(element) {
-    element.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
     props.onUpdateAvatar({
       avatar: avatarRef.current.value,
-    }, element);  
+    });  
   };
 
   return (
-    <PopupWithForm name="edit-avatar" title="Обновить аватар" buttonText="Сохранить аватарку" isOpen={props.isOpen ? 'popup_opened' : ''} onClose={props.onClose} onSubmit={handleSubmit}>
+    <PopupWithForm name="edit-avatar" title="Обновить аватар" buttonText="Сохранить аватарку" isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit}>
     <label className="popup__form-field">
       <input type="url" ref={avatarRef} placeholder="Ссылка на аватарку" id="input-avatar-link"
         className="popup__input popup__input_type_avatar-link" name="avatarLink" required />

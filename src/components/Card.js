@@ -1,4 +1,9 @@
-export function Card({card, currentUser, onCardClick, onCardDelete, onCardLike}) {
+import { useContext } from "react";
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+
+export function Card({card, onCardClick, onCardDelete, onCardLike}) {
+
+  const currentUser = useContext(CurrentUserContext);
 
   const isOwn = card.owner._id === currentUser._id;
   const isLike = card.likes.some(i => i._id === currentUser._id);

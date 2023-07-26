@@ -1,5 +1,6 @@
 import React from 'react';
 import { api } from '../utils/Api';
+import { auth } from '../utils/auth';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { Header } from './Header';
@@ -36,11 +37,11 @@ function App() {
   React.useEffect(() => {
     const jwt = localStorage.getItem('jwt');
 
-    Promise.all([api.getUserInfo(), api.getInitialCards(), jwt && api.tokenCheack(jwt)])
+    Promise.all([api.getUserInfo(), api.getInitialCards(), jwt && auth.tokenCheack(jwt)])
       .then(([user, cards, data]) => {
-        setCurrentUser(user, user.email = `${data && data.email}`);
+        setCurrentUser({ ...user, email: `${data && data.email}` });
         setCurrentCards(cards.reverse());
-
+        
         if (data) {
           navigate(rout.main);
         }
@@ -110,36 +111,33 @@ function App() {
       })
   };
 
-  function handleUpdateUser(user, element) {
+  function handleUpdateUser(user) {
     api.patchUserInfo(user.name, user.about)
       .then((state) => {
-        setCurrentUser(state);
+        setCurrentUser((currentState) => ({ ...currentState, ...state }))
         closeAllPopups();
-        element.target.reset();
       })
       .catch((err) => {
         console.log(err)
       })
   };
 
-  function handleUpdateAvatar(avatar, element) {
+  function handleUpdateAvatar(avatar) {
     api.patchAvatar(avatar.avatar)
       .then((state) => {
-        setCurrentUser(state);
+        setCurrentUser((currentState) => ({ ...currentState, ...state }))
         closeAllPopups();
-        element.target.reset();
       })
       .catch((err) => {
         console.log(err)
       })
   };
 
-  function handleAddPlaceSubmit(card, element) {
+  function handleAddPlaceSubmit(card) {
     api.postNewCard(card.name, card.link)
       .then((newCard) => {
         setCurrentCards([newCard, ...currentCards]);
         closeAllPopups();
-        element.target.reset();
       })
       .catch((err) => {
         console.log(err)
@@ -153,7 +151,7 @@ function App() {
   }
 
   function handleRegisterSubmit(email, password) {
-    api.register(email, password)
+    auth.register(email, password)
       .then(() => {
         setRoutPopupOpen(true);
         setRoutOn(true)
@@ -167,11 +165,11 @@ function App() {
   };
 
   function handleLoginSubmit(email, password) {
-    api.auth(email, password)
+    auth.auth(email, password)
       .then((data) => {
         if (data.token) {
           setCurrentUser(currentUser, currentUser.email = `${email}`);
-          navigate(rout.main)
+          navigate(rout.main);
         }
       })
       .catch((err) => {
@@ -211,3 +209,12 @@ function App() {
 }
 
 export default App;
+
+
+/* Осталось:
+  1. Разобраться с АПИ - Вынести апи в отдельный файл, создать метод для проверки, ну и обновить старый апи, где я не правильно передавал данные;
+
+  2. Сделать кастомный хук;
+
+  3. Сделать, как он предлагал - обертку popup;
+  */

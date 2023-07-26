@@ -7,6 +7,6 @@ export function ProtectedRoute(props) {
   const user = React.useContext(CurrentUserContext);
 
   return (
-    user ? props.children : <Navigate to={props.rout.login} replace />
+    user._id ? props.children : <Navigate to={props.rout.login} replace />
   )
 }

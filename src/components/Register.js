@@ -25,12 +25,12 @@ export function Register(props) {
       <h2 className="auth__title">Регистрация</h2>
       <form className="auth__form" onSubmit={handleSubmit}>
         <label className="auth__form-field">
-            <input type="email" onChange={handleChangeEmail} placeholder="Email" id="input-email"
+            <input type="email" onChange={handleChangeEmail} value={email || ''} placeholder="Email" id="input-email"
               className="auth__input auth__input_type_email" name="email" required />
             <span className="auth__input-error input-email-error"></span>
           </label>
           <label className="auth__form-field">
-            <input type="password" onChange={handleCgangePassword} placeholder="Пароль" id="input-password"
+            <input type="password" onChange={handleCgangePassword} value={password || ''} placeholder="Пароль" id="input-password"
               className="auth__input auth__input_type_password" name="password" required />
             <span className="auth__input-error input-password-error"></span>
           </label>

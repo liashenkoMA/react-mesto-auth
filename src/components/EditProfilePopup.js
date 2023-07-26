@@ -23,17 +23,24 @@ export function EditProfilePopup(props) {
     setDescription(currentUser.about);
   }, [currentUser, props.isOpen]);
 
-  function handleSubmit(element) {
-    element.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
     props.onUpdateUser({
       name,
       about: description,
-    }, element);
+    });
   };
 
+  React.useEffect(() => {
+    if (props.isOpen === false) {
+      setName('')
+      setDescription('')
+    }
+  }, [props.isOpen])
+
   return (
-    <PopupWithForm name="edit-profile" title="Редактировать профиль" buttonText="Сохранить изменения" isOpen={props.isOpen ? 'popup_opened' : ''} onClose={props.onClose} onSubmit={handleSubmit}>
+    <PopupWithForm name="edit-profile" title="Редактировать профиль" buttonText="Сохранить изменения" isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit}>
     <label className="popup__form-field">
       <input type="text" onChange={handleChangeName} value={name || ''} placeholder="Введите имя" id="name" className="popup__input popup__input_type_title"
         name="myName" required minLength="2" maxLength="40" />
