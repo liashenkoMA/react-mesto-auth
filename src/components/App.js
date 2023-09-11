@@ -41,7 +41,7 @@ function App() {
       .then(([user, cards, data]) => {
         setCurrentUser({ ...user, email: `${data && data.email}` });
         setCurrentCards(cards.reverse());
-        
+
         if (data) {
           navigate(rout.main);
         }
@@ -209,12 +209,3 @@ function App() {
 }
 
 export default App;
-
-
-/* Осталось:
-  1. Разобраться с АПИ - Вынести апи в отдельный файл, создать метод для проверки, ну и обновить старый апи, где я не правильно передавал данные;
-
-  2. Сделать кастомный хук;
-
-  3. Сделать, как он предлагал - обертку popup;
-  */
